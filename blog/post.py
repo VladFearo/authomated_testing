@@ -6,4 +6,8 @@ class Post:
     def __repr__(self):
         return f'<Post {self.title}>'
     
-
+    def json(self):
+        return {
+            'title': self.title,
+            'content': self.content,
+        }
