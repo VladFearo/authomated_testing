@@ -5,6 +5,34 @@ from blog.blog import Blog
 from blog.post import Post
 
 class AppTest(TestCase):
+    def test_menu_calls_create_blog(self):
+        with patch('builtins.input') as mocked_input:
+            with patch('app.ask_create_blog') as mocked_create_blog:
+                mocked_input.side_effect = ('c','q')
+                app.menu()
+                mocked_create_blog.assert_called()
+
+    def test_menu_calls_print_blogs(self):
+        with patch('builtins.input') as mocked_input:
+            with patch('app.print_blogs') as mocked_print_blogs:
+                mocked_input.side_effect = ('l','q')
+                app.menu()
+                mocked_print_blogs.assert_called()
+    
+    def test_menu_calls_ask_read_blog(self):
+        with patch('builtins.input') as mocked_input:
+            with patch('app.ask_read_blog') as mocked_read_blog:
+                mocked_input.side_effect = ('r','q')
+                app.menu()
+                mocked_read_blog.assert_called()
+    
+    def test_menu_calls_ask_create_post(self):
+        with patch('builtins.input') as mocked_input:
+            with patch('app.ask_create_post') as mocked_create_post:
+                mocked_input.side_effect = ('p','q')
+                app.menu()
+                mocked_create_post.assert_called()
+    
     def test_menu_input(self):
         with patch('builtins.input', return_value = 'q') as mocked_input:
             app.menu()
@@ -50,3 +78,13 @@ class AppTest(TestCase):
         with patch('builtins.print') as mocked_print:
             app.print_post(post)
             mocked_print.assert_called_with(app.POST_TEMPLATE.format("Test Post", "Test Content"))
+
+
+    def test_ask_create_post(self):
+        blog = Blog("Test", "Test Author")
+        app.blogs = {"Test": blog}
+        with patch('builtins.input') as mocked_input:
+            mocked_input.side_effect = ("Test", "Test Post", "Test Content")
+            app.ask_create_post()
+            self.assertEqual(blog.posts[0].title, "Test Post")
+            self.assertEqual(blog.posts[0].content, "Test Content")
