@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from flask_restful import Api
 
-from resources.item import Item, ItemList
+from RestAPI.resources.item import Item, ItemList
 
 app = Flask(__name__)
 
